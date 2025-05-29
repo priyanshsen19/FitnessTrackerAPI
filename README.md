@@ -31,7 +31,7 @@ GET /api/activities/progress?userId=<user_id>&day=<number_of_days>
 
 ---
 
-## 🔐 API Key Protection
+## API Key Protection
 
 To access secure routes like `/summary`, include this header:
 
@@ -41,7 +41,7 @@ x-api-key: supersecretkey123
 
 ---
 
-## 📊 GET `/api/activities/summary?userId=1001`
+## GET `/api/activities/summary?userId=1001`
 
 Returns a summary of the user's completion status:
 
@@ -63,7 +63,7 @@ x-api-key: supersecretkey123
 
 ---
 
-## 📆 GET `/api/activities/today?userId=1001`
+## GET `/api/activities/today?userId=1001`
 
 Returns activities suggested for **today’s calendar date**.
 
