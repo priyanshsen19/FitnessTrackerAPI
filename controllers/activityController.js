@@ -74,3 +74,22 @@ exports.getUserProgressByDay = async (req, res) => {
     res.status(500).json({ error: 'Server Error' });
   }
 };
+
+exports.getUserSummary = async (req, res) => {
+  try {
+    const { userId } = req.query;
+    const progress = await UserActivityProgress.find({ userId });
+
+    const totalCompleted = progress.filter(p => p.isCompleted).length;
+    const totalActivities = progress.length;
+
+    res.json({
+      userId,
+      totalActivities,
+      completed: totalCompleted,
+      completionRate: totalActivities ? ((totalCompleted / totalActivities) * 100).toFixed(1) + '%' : '0%'
+    });
+  } catch (err) {
+    res.status(500).json({ error: 'Server Error' });
+  }
+};
