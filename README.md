@@ -76,7 +76,6 @@ Returns activities suggested for **today’s calendar date**.
       "title": "Push Ups",
       "isCompleted": false
     },
-    ...
   ]
 }
 ```
