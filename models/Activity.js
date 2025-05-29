@@ -6,7 +6,7 @@ const activitySchema = new mongoose.Schema({
   category: String,
   frequency: String,
   duration: String,
-  suggestedDays: [Number]
-});
+  suggestedDays: [Number],
+}, { timestamps: true });
 
 module.exports = mongoose.model('Activity', activitySchema);

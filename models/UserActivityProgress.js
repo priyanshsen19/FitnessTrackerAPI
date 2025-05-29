@@ -6,6 +6,6 @@ const progressSchema = new mongoose.Schema({
   day: Number,
   isCompleted: { type: Boolean, default: false },
   completedAt: Date
-});
+}, { timestamps: true });
 
 module.exports = mongoose.model('UserActivityProgress', progressSchema);

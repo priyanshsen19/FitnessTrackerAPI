@@ -93,3 +93,7 @@ exports.getUserSummary = async (req, res) => {
     res.status(500).json({ error: 'Server Error' });
   }
 };
+
+exports.getTodayActivities = async (req, res) => {
+  const today = new Date().getDate();
+};
