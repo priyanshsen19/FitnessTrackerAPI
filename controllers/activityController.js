@@ -1,10 +1,13 @@
 const Activity = require('../models/Activity');
 const UserActivityProgress = require('../models/UserActivityProgress');
+const validateUserExists = require('../utils/validateUser');
 
 exports.getActivitiesByDay = async (req, res) => {
   try {
     const { day } = req.params;
     const userId = req.query.userId;
+
+     if (!(await validateUserExists(userId, res))) return;
 
     const activities = await Activity.find({ suggestedDays: parseInt(day) });
     const progress = await UserActivityProgress.find({
@@ -30,6 +33,8 @@ exports.markActivityComplete = async (req, res) => {
   try {
     const { activityId } = req.params;
     const { userId, day } = req.body;
+
+    if (!(await validateUserExists(userId, res))) return;
 
     let existing = await UserActivityProgress.findOne({ userId, activityId, day });
 
@@ -57,6 +62,9 @@ exports.getUserProgressByDay = async (req, res) => {
   try {
     const { userId } = req.query;
     const { day } = req.query;
+
+    if (!(await validateUserExists(userId, res))) return;
+
     const activities = await Activity.find({ suggestedDays: parseInt(day) });
     const progress = await UserActivityProgress.find({
       userId,
@@ -80,6 +88,8 @@ exports.getUserSummary = async (req, res) => {
     const { userId } = req.query;
     const progress = await UserActivityProgress.find({ userId });
 
+    if (!(await validateUserExists(userId, res))) return;
+
     const totalCompleted = progress.filter(p => p.isCompleted).length;
     const totalActivities = progress.length;
 
@@ -97,6 +107,9 @@ exports.getUserSummary = async (req, res) => {
 exports.getTodayActivities = async (req, res) => {
   try {
     const userId = req.query.userId;
+
+    if (!(await validateUserExists(userId, res))) return;
+
     const startOfDay = new Date();
     startOfDay.setHours(0, 0, 0, 0);
 
