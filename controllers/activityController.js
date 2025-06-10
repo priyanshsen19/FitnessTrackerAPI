@@ -95,5 +95,36 @@ exports.getUserSummary = async (req, res) => {
 };
 
 exports.getTodayActivities = async (req, res) => {
-  const today = new Date().getDate();
+  try {
+    const userId = req.query.userId;
+    const startOfDay = new Date();
+    startOfDay.setHours(0, 0, 0, 0);
+
+    const endOfDay = new Date();
+    endOfDay.setHours(23, 59, 59, 999);
+
+    const progress = await UserActivityProgress.find({
+      userId,
+      completedAt: { $gte: startOfDay, $lte: endOfDay }
+    });
+
+    const activityIds = progress.map(p => p.activityId);
+    const activities = await Activity.find({ _id: { $in: activityIds } });
+  
+    if (activities.length === 0) {
+      return res.json(['No activities completed today']);
+    }
+
+    const result = activities.map(activity => {
+      const status = progress.find(p => p.activityId === activity._id);
+      return {
+        ...activity._doc,
+        isCompleted: status?.isCompleted || false
+      };
+    });
+
+    res.json(result);
+  } catch (err) {
+    res.status(500).json({ error: 'Server Error' });
+  }
 };
