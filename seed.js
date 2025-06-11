@@ -1,33 +1,78 @@
-const mongoose = require('mongoose');
-const connectDB = require('./config/db');
-const User = require('./models/User');
 const Activity = require('./models/Activity');
+const db = require('./config/db');
 
-const seed = async () => {
-  await connectDB();
-  await User.deleteMany({});
+const data = [
+  {
+    "name": "Advanced Mobility exercises",
+    "category": "Athleticism",
+    "frequency": "3x/Week",
+    "duration": "Max",
+    "suggestedDays": [1, 2, 8, 9, 10, 12, 14, 15, 19, 20, 22, 27]
+  },
+  {
+    "name": "Knowledge Boosters (Follow daily plans)",
+    "category": "Boosters",
+    "frequency": "3x/Week",
+    "duration": "30 sec",
+    "suggestedDays": [1, 4, 14, 16, 17, 18, 19, 21, 22, 27, 28, 30]
+  },
+  {
+    "name": "Visual Solfege",
+    "category": "Music",
+    "frequency": "3x/Week",
+    "duration": "30 sec",
+    "suggestedDays": [1, 3, 5, 7, 9, 16, 19, 20, 22, 23, 24, 26]
+  },
+  {
+    "name": "Auditory Memory (Song 2)",
+    "category": "Memory",
+    "frequency": "3x/Week",
+    "duration": "30 sec",
+    "suggestedDays": [1, 3, 4, 5, 7, 11, 17, 18, 20, 21, 24, 30]
+  },
+  {
+    "name": "Auditory Magic (Set 2)",
+    "category": "Creativity",
+    "frequency": "3x/Week",
+    "duration": "60 sec",
+    "suggestedDays": [2, 3, 5, 7, 8, 9, 11, 18, 19, 25, 27, 30]
+  },
+  {
+    "name": "Talk, To Listen",
+    "category": "Languages",
+    "frequency": "3x/Week",
+    "duration": "60 sec",
+    "suggestedDays": [5, 6, 8, 12, 14, 15, 19, 21, 24, 26, 29, 30]
+  },
+  {
+    "name": "Finger Skills",
+    "category": "Athleticism",
+    "frequency": "3x/Week",
+    "duration": "60 sec",
+    "suggestedDays": [1, 6, 9, 12, 13, 14, 15, 21, 23, 25, 27, 30]
+  },
+  {
+    "name": "Stimulus Explosion",
+    "category": "Creativity",
+    "frequency": "3x/Week",
+    "duration": "60 sec",
+    "suggestedDays": [2, 4, 8, 9, 12, 18, 20, 22, 23, 25, 28, 29]
+  },
+  {
+    "name": "Foundations of Logic (Quantity)",
+    "category": "Logic",
+    "frequency": "3x/Week",
+    "duration": "60 sec",
+    "suggestedDays": [6, 12, 13, 14, 15, 18, 23, 25, 26, 27, 29, 30]
+  }
+];
+
+async function seedActivities() {
+  await db();
   await Activity.deleteMany({});
-
-  const user = await User.create({
-    _id: 1001,
-    name: 'Priyansh',
-    email: 'Priyansh.sen@example.com'
-  });
-
-  const activities = await Activity.insertMany([
-    { _id: 'ACT1001', title: '5-min Meditation', category: 'Mindfulness', frequency: '1x/Day', duration: '5 min', suggestedDays: [15, 20, 25, 30] },
-    { _id: 'ACT1002', title: 'Jumping Jacks', category: 'Cardio', frequency: '1x/Day', duration: '30 sec', suggestedDays: [14, 15, 16, 17, 18] },
-    { _id: 'ACT1003', title: 'Deep Breathing', category: 'Relaxation', frequency: '2x/Day', duration: '3 min', suggestedDays: [15, 20, 30] },
-    { _id: 'ACT1004', title: 'Push Ups', category: 'Strength', frequency: '1x/Day', duration: '5 min', suggestedDays: [14, 16, 18, 20] },
-    { _id: 'ACT1005', title: 'Lunges', category: 'Strength', frequency: '2x/Week', duration: '5 min', suggestedDays: [15, 20, 25, 30] },
-    { _id: 'ACT1006', title: 'Neck Rolls', category: 'Stretching', frequency: '1x/Day', duration: '2 min', suggestedDays: [14, 16, 18, 20, 22] },
-    { _id: 'ACT1007', title: 'High Knees', category: 'Cardio', frequency: '2x/Week', duration: '1 min', suggestedDays: [14, 17, 20, 23] },
-    { _id: 'ACT1008', title: 'Plank Hold', category: 'Core', frequency: '1x/Day', duration: '60 sec', suggestedDays: [15, 18, 21, 24] },
-    { _id: 'ACT1009', title: 'Toe Touch Stretch', category: 'Flexibility', frequency: '1x/Day', duration: '2 min', suggestedDays: [14, 16, 19, 22] }
-  ]);
-
-  console.log('Seeded successfully. User ID:', user._id);
+  await Activity.insertMany(data);
+  console.log('Full-month activity seed complete');
   process.exit();
-};
+}
 
-seed();
+seedActivities();

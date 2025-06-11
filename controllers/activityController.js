@@ -107,29 +107,15 @@ exports.getUserSummary = async (req, res) => {
 exports.getTodayActivities = async (req, res) => {
   try {
     const userId = req.query.userId;
-
     if (!(await validateUserExists(userId, res))) return;
 
-    const startOfDay = new Date();
-    startOfDay.setHours(0, 0, 0, 0);
+    const today = new Date().getDate();
 
-    const endOfDay = new Date();
-    endOfDay.setHours(23, 59, 59, 999);
-
-    const progress = await UserActivityProgress.find({
-      userId,
-      completedAt: { $gte: startOfDay, $lte: endOfDay }
-    });
-
-    const activityIds = progress.map(p => p.activityId);
-    const activities = await Activity.find({ _id: { $in: activityIds } });
-  
-    if (activities.length === 0) {
-      return res.json(['No activities completed today']);
-    }
+    const activities = await Activity.find({ suggestedDays: today });
+    const progress = await UserActivityProgress.find({ userId, day: today });
 
     const result = activities.map(activity => {
-      const status = progress.find(p => p.activityId === activity._id);
+      const status = progress.find(p => p.activityId.equals(activity._id));
       return {
         ...activity._doc,
         isCompleted: status?.isCompleted || false
